@@ -9,8 +9,8 @@ class APIGateway {
   private port: number;
 
   constructor() {
-    this.proxy = createServer();
     this.app = express();
+    this.proxy = createServer();
     this.port = parseInt(configuration.get("PORT")) || 3000;
   }
 
@@ -27,6 +27,10 @@ class APIGateway {
   }
 }
 
-// Instanciar y empezar el servidor
-const gateway = new APIGateway();
-gateway.start();
+try {
+    // Instanciar y empezar el servidor
+  const gateway = new APIGateway();
+  gateway.start();
+} catch (error) {
+  console.log(error)
+}

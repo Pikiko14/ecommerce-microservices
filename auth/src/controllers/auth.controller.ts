@@ -19,8 +19,8 @@ export class AuthController {
    */
   register = async (req: Request, res: Response): Promise<void | User | null>  => {
     try {
-      const body = matchedData(req);
-      return await this.service.registerUser(res, req.body);
+      const body = matchedData(req) as User;
+      return await this.service.registerUser(res, body);
     } catch (error: any) {
       ResponseHandler.handleInternalError(res, error, error.message);
     }

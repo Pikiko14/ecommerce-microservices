@@ -20,8 +20,6 @@ export class Server {
   private app: Application;
   /** The port the server should run on */
   private readonly PORT: number | string;
-  /** The path to the public directory */
-  private readonly publicDirectoryPath: string;
   /** The path to the route directory */
   private readonly routeDirectoryPath: string;
 
@@ -32,7 +30,6 @@ export class Server {
     this.app = express();
     this.setupMessageBroker();
     this.PORT = parseInt(configuration.get('PORT')) || 3000; // Default port
-    this.publicDirectoryPath = path.join(__dirname, '../uploads');
     this.routeDirectoryPath = path.join(__dirname, './routes'); // Path to your routes directory
   }
 
@@ -41,9 +38,7 @@ export class Server {
    */
   private configureMiddleware(): void {
     const corsOptions: CorsOptions = {
-      origin: [
-        'http://localhost:9000',
-      ],
+      origin: '*',
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
       optionsSuccessStatus: 204,
@@ -51,7 +46,6 @@ export class Server {
     this.loadRoutes();
     this.app.use(express.json());
     this.app.use(cors(corsOptions));
-    this.app.use(express.static(this.publicDirectoryPath) as unknown as string);
   }
 
   /**
