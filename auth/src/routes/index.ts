@@ -39,7 +39,7 @@ class RoutesIndex {
         const nameFile = this.utils.splitFile(fileName, ".");
         import(`./${nameFile}.routes`).then((moduleRouter) => {
           console.log(`Loading ${nameFile} routers`);
-          this.router.use(`/api/v1/${nameFile}`, moduleRouter.router);
+          this.router.use(`/`, moduleRouter.router);
         });
       }
     });
