@@ -3,13 +3,13 @@
  */
 
 // Imports
-import express, { Application, Router } from 'express';
-import cors, { CorsOptions } from 'cors';
-import RoutesIndex from './routes';
 import path from 'path';
-import configuration from '../configuration/configuration';
+import RoutesIndex from './routes';
+import cors, { CorsOptions } from 'cors';
 import Database from '../configuration/db';
-import { router } from './../../../smartCatalog/src/routes/catalogues';
+import express, { Application } from 'express';
+import messageBroker from './utils/messageBroker';
+import configuration from '../configuration/configuration';
 
 // Classes
 /**
@@ -30,6 +30,7 @@ export class Server {
    */
   constructor() {
     this.app = express();
+    this.setupMessageBroker();
     this.PORT = parseInt(configuration.get('PORT')) || 3000; // Default port
     this.publicDirectoryPath = path.join(__dirname, '../uploads');
     this.routeDirectoryPath = path.join(__dirname, './routes'); // Path to your routes directory
@@ -47,11 +48,10 @@ export class Server {
       credentials: true,
       optionsSuccessStatus: 204,
     };
-
-    this.app.use(cors(corsOptions));
-    this.app.use(express.json());
     this.loadRoutes();
-    this.app.use(express.static(this.publicDirectoryPath));
+    this.app.use(express.json());
+    this.app.use(cors(corsOptions));
+    this.app.use(express.static(this.publicDirectoryPath) as unknown as string);
   }
 
   /**
@@ -62,6 +62,13 @@ export class Server {
     const routes = new RoutesIndex();
     routes.loadRoutes();
     this.app.use(routes.getRouter());
+  }
+
+  /**
+   * Set message broker
+   */
+  setupMessageBroker(): void {
+    messageBroker.connect();
   }
 
   /**
