@@ -16,5 +16,14 @@ router.post(
     controller.register
 );
 
+/**
+ * Do register user
+ */
+router.post(
+    '/login',
+    RegisterValidator,
+    controller.register
+);
+
 // export router
 export { router };
