@@ -1,13 +1,24 @@
 import amqp, { Channel, Connection } from "amqplib";
 import configuration from "../../configuration/configuration";
+import { MessageBrokerInterface } from "../interfaces/broker.interface";
 
+/**
+ * Clase encargada de interactuar con el broker de mensajes RabbitMQ.
+ * Ofrece métodos para publicar y consumir mensajes.
+ */
 class MessageBroker {
   private channel: Channel | null;
 
+  /**
+   * Constructor de la clase.
+   */
   constructor() {
     this.channel = null;
   }
 
+  /**
+   * Conecta al broker de mensajes RabbitMQ.
+   */
   async connect(): Promise<void> {
     console.log("Connecting to RabbitMQ...");
 
@@ -37,7 +48,12 @@ class MessageBroker {
     }, 3000); // delay 3 seconds to wait for RabbitMQ to start
   }
 
-  async publishMessage(queue: string, message: any): Promise<void> {
+  /**
+   * Publica un mensaje en el broker de mensajes.
+   * @param queue Nombre de la cola donde se publicará el mensaje
+   * @param message Contenido del mensaje a publicar
+   */
+  async publishMessage(queue: string, message: MessageBrokerInterface): Promise<void> {
     if (!this.channel) {
       console.error("No RabbitMQ channel available.");
       return;
@@ -53,6 +69,11 @@ class MessageBroker {
     }
   }
 
+  /**
+   * Consume un mensaje del broker de mensajes.
+   * @param queue Nombre de la cola desde donde se consumirá el mensaje
+   * @param callback Función a la que se le pasará el contenido del mensaje
+   */
   async consumeMessage(queue: string, callback: (message: any) => void): Promise<void> {
     if (!this.channel) {
       console.error("No RabbitMQ channel available.");
@@ -74,4 +95,5 @@ class MessageBroker {
   }
 }
 
-export default new MessageBroker();
+export default new MessageBroker(); // Instancia única de la clase
+

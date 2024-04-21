@@ -3,6 +3,7 @@ import messageBroker from "../utils/messageBroker";
 import { User } from "../interfaces/users.interface";
 import { ResponseHandler } from "../utils/responseHandler";
 import UserRepository from "../repositories/user.repository";
+import { MessageBrokerInterface, TypeNotification } from "../interfaces/broker.interface";
 
 class AuthService extends UserRepository {
   constructor() {
@@ -24,11 +25,12 @@ class AuthService extends UserRepository {
       const user = await this.create(body);
 
       // push notification queueue
-      await messageBroker.publishMessage('notifications', {
-        user,
-        type_notification: "email",
-        type_email: "welcome",
-      });
+      const message: MessageBrokerInterface = {
+        data: user,
+        type_notification: TypeNotification.EMAIL,
+        template: "welcome",
+      }
+      await messageBroker.publishMessage('notifications', message);
 
       // return data
       return ResponseHandler.createdResponse(
