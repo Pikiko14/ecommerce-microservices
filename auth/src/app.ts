@@ -43,8 +43,8 @@ export class Server {
       credentials: true,
       optionsSuccessStatus: 204,
     };
-    this.loadRoutes();
     this.app.use(express.json());
+    this.loadRoutes();
     this.app.use(cors(corsOptions));
   }
 
