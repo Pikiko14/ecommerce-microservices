@@ -32,7 +32,7 @@ class MessageBroker {
       } catch (err: any) {
         console.error("Failed to connect to RabbitMQ:", err.message);
       }
-    }, 20000); // delay 3 seconds to wait for RabbitMQ to start
+    }, 3000); // delay 3 seconds to wait for RabbitMQ to start
   }
 
   /**
