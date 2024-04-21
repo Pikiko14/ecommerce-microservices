@@ -1,17 +1,39 @@
-import Server from "http-proxy";
 import { createServer } from "http-proxy";
-import configuration from "./../configuration/configuration" 
-import express, { Request, Response, Application } from "express";
+import configuration from "./../configuration/configuration";
+import express, { Request, Response, Application, NextFunction } from "express";
+import * as winston from 'winston';
 
 class APIGateway {
-  private proxy: Server;
+  private proxy: ReturnType<typeof createServer>;
   private app: Application;
   private port: number;
+
+  private logger: winston.Logger;
 
   constructor() {
     this.app = express();
     this.proxy = createServer();
     this.port = parseInt(configuration.get("PORT")) || 3000;
+    this.logger = this.setupLogger();
+    this.setupProxyErrorHandler();
+  }
+
+  private setupLogger(): winston.Logger {
+    const logger = winston.createLogger({
+      level: 'error', // Set the log level as needed
+      transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: 'error.log' }) // Log errors to a file
+      ]
+    });
+    return logger;
+  }
+
+  private setupProxyErrorHandler(): void {
+    this.proxy.on('error', (err, req, res: any) => {
+      this.logger.error(`Proxy Error: ${err.message}`);
+      res.status(500).send('Proxy Error');
+    });
   }
 
   public start(): void {
@@ -28,9 +50,9 @@ class APIGateway {
 }
 
 try {
-    // Instanciar y empezar el servidor
+  // Instanciar y empezar el servidor
   const gateway = new APIGateway();
   gateway.start();
 } catch (error) {
-  console.log(error)
+  console.error(error);
 }

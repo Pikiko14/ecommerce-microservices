@@ -55,8 +55,8 @@ const RegisterValidator = [
     .withMessage("Last name is empty")
     .isString()
     .withMessage("Last name must be a string")
-    .isLength({ min: 5, max: 90 })
-    .withMessage("Last name must have a minimum of 5 characters"),
+    .isLength({ min: 3, max: 90 })
+    .withMessage("Last name must have a minimum of 3 characters"),
   check("email")
     .exists()
     .withMessage("Email does not exist")
