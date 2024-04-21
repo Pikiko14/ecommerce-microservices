@@ -5,7 +5,9 @@ export enum TypeNotification {
 }
 
 export interface MessageBrokerInterface {
-  data: object;
+  data: any;
   type_notification: TypeNotification;
   template: string;
+  to: string | null | undefined;
+  subject: string | null | undefined;
 }
