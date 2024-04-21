@@ -1,4 +1,5 @@
 import { MessageSender } from "../../interfaces/notification.interface";
+import { MessageBrokerInterface } from "../../interfaces/broker.interface";
 
 /**
  * Clase encargada de enviar mensajes por correo electrónico
@@ -8,7 +9,7 @@ export class EmailSenderService implements MessageSender {
    * Envía un mensaje por correo electrónico
    * @param message Contenido del mensaje a enviar
    */
-  async sendMessage(message: string): Promise<void> {
+  async sendMessage(message: MessageBrokerInterface): Promise<void> {
     // Lógica para enviar mensaje por correo electrónico
     console.log("Sending email:", message);
   }
