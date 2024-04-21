@@ -50,7 +50,6 @@ export class EmailSenderService implements NotificationSenderInterface {
       this.messageData.html = await this.getTemplate(message.template, message.data);
 
       // send message
-      console.log(this.messageData);
       await this.transporter.sendMail(this.messageData as any);
     } catch (error: any) {
       throw new Error(`Failed to send email: ${error.message}`);

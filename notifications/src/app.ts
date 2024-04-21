@@ -29,7 +29,6 @@ class NotificationConsumer {
         // Procesar el mensaje según el tipo de notificación
         await notificationService.sendMessage(type_notification, message);
       } catch (error) {
-        console.error("Error processing message:", error);
         // Manejar el error según sea necesario
       }
     });
