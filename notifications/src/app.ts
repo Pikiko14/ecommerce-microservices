@@ -23,11 +23,9 @@ class NotificationConsumer {
    */
   async startConsuming(): Promise<void> {
     messageBroker.consumeMessage(configuration.get('BROKER_CHANNEL') || "notifications", async (message: MessageBrokerInterface) => {
-      console.log("Received message:", message);
       try {
         // get message data
         const { type_notification } = message;
-        console.log(type_notification);
         // Procesar el mensaje según el tipo de notificación
         await notificationService.sendMessage(type_notification, message);
       } catch (error) {

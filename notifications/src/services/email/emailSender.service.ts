@@ -1,10 +1,10 @@
-import { MessageSender } from "../../interfaces/notification.interface";
+import { NotificationSenderInterface } from "../../interfaces/notification.interface";
 import { MessageBrokerInterface } from "../../interfaces/broker.interface";
 
 /**
  * Clase encargada de enviar mensajes por correo electrónico
  */
-export class EmailSenderService implements MessageSender {
+export class EmailSenderService implements NotificationSenderInterface {
   /**
    * Envía un mensaje por correo electrónico
    * @param message Contenido del mensaje a enviar

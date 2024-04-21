@@ -1,10 +1,10 @@
-import { MessageSender } from "../../interfaces/notification.interface";
+import { NotificationSenderInterface } from "../../interfaces/notification.interface";
 import { MessageBrokerInterface } from "../../interfaces/broker.interface";
 
 /**
  * Clase encargada de enviar mensajes por SMS
  */
-export class SmsSenderService implements MessageSender {
+export class SmsSenderService implements NotificationSenderInterface {
   /**
    * Envía un mensaje por SMS
    * @param message Contenido del mensaje a enviar

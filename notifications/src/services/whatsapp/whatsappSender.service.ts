@@ -1,10 +1,10 @@
-import { MessageSender } from "../../interfaces/notification.interface";
+import { NotificationSenderInterface } from "../../interfaces/notification.interface";
 import { MessageBrokerInterface } from "../../interfaces/broker.interface";
 
 /**
  * Clase encargada de enviar mensajes por WhatsApp.
  */
-export class WhatsAppSender implements MessageSender {
+export class WhatsAppSender implements NotificationSenderInterface {
   /**
    * Envía un mensaje por WhatsApp.
    * @param message Contenido del mensaje a enviar
