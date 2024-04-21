@@ -32,7 +32,7 @@ class APIGateway {
   private setupProxyErrorHandler(): void {
     this.proxy.on('error', (err, req, res: any) => {
       this.logger.error(`Proxy Error: ${err.message}`);
-      res.status(500).send('Proxy Error');
+      res.status(500).send(`Proxy Error: ${err.message}`);
     });
   }
 
