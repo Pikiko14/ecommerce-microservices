@@ -24,7 +24,11 @@ class AuthService extends UserRepository {
       const user = await this.create(body);
 
       // push notification queueue
-      await messageBroker.publishMessage('notifications', user);
+      await messageBroker.publishMessage('notifications', {
+        user,
+        type_notification: "email",
+        type_email: "welcome",
+      });
 
       // return data
       return ResponseHandler.createdResponse(
