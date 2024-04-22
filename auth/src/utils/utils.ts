@@ -1,9 +1,10 @@
 import fs from "fs";
 import * as crypto from "crypto";
 import * as bcrypt from "bcryptjs";
-import moment, { DurationInputArg1 } from "moment";
+import moment from "moment";
 import { sign, verify } from "jsonwebtoken";
 import { User } from "../interfaces/users.interface";
+import configuration from "../../configuration/configuration";
 
 class Utils {
   JWT_SECRET: string = "";
@@ -11,7 +12,7 @@ class Utils {
   path: string;
 
   constructor() {
-    this.JWT_SECRET = process.env.JWT_SECRET || "";
+    this.JWT_SECRET = configuration.get("JWT_SECRET") || "";
     this.salt = 10;
     this.path = `${process.cwd()}/uploads/`;
   }
@@ -33,7 +34,7 @@ class Utils {
    * @param {string} name
    */
   generateToken = async ({ name, scopes, _id, role, last_name, email }: User) => {
-    const jwt = await sign({ _id, name, scopes, parent, role, last_name, email }, this.JWT_SECRET, {
+    const jwt = await sign({ _id, name, scopes, role, last_name, email }, this.JWT_SECRET, {
       expiresIn: "1d",
     });
     return jwt;

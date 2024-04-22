@@ -41,6 +41,14 @@ const UserSchema = new Schema<User>(
     profile_pictury: {
       type: String,
       default: null,
+    },
+    is_active: {
+      type: Boolean,
+      default: false,
+    },
+    confirmation_token: {
+      type: String,
+      default: null,
     }
   },
   {

@@ -14,8 +14,10 @@ export interface User extends LoginInterface {
   email: string;
   role?: UserRole;
   scopes?: string[];
+  is_active?: boolean;
   recovery_token?: string;
   profile_pictury?: string;
   name: string | undefined;
   last_name: string | undefined;
+  confirmation_token?: string | null;
 }

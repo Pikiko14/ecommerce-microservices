@@ -22,13 +22,13 @@ class NotificationService {
    */
   async sendMessage(type: TypeNotification, message: MessageBrokerInterface): Promise<void> {
     try {
-        const sender = NotificationSenderFactory.createSender(type);
-        const email = await sender.sendMessage(message);
-        console.log(`Notification send success with type ${type}`);
-      } catch (error: any) {
-        this.logger.error(error.message, { error }); // Registrar el error en los registros de Winston
-        throw new Error('Failed to send message');
-      }
+      const sender = NotificationSenderFactory.createSender(type);
+      const email = await sender.sendMessage(message);
+      console.log(`Notification send success with type ${type}`);
+    } catch (error: any) {
+      this.logger.error(error.message, { error }); // Registrar el error en los registros de Winston
+      throw new Error('Failed to send message');
+    }
   }
 }
 

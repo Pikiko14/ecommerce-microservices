@@ -67,6 +67,12 @@ export class EmailSenderService implements NotificationSenderInterface {
         `${this.pathTemplates}${template}.html`,
       );
 
+      // validate some extra features
+      if (template === 'welcome') {
+        params.url_confirmation = `${configuration.get('URL_CONFIRMATION')}/api/v1/auth/confirm`;
+        params.app_url = configuration.get('APP_URL') || 'https://localhost:8080';
+      }
+
       // set html content
       let htmlWithContentParse = html.toString();
       Object.keys(params).forEach(variable => {
