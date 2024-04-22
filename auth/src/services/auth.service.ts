@@ -16,7 +16,7 @@ class AuthService extends UserRepository {
 
   /**
    * Register new user
-   * @param resp The response object
+   * @param { Response } resp The response object
    * @param body The body of the request
    * @returns A Promise of 1
    */
@@ -56,6 +56,9 @@ class AuthService extends UserRepository {
 
   /**
    * User confirmation
+   * @param { Response } resp The response object
+   * @param token The token of the request
+   * @param action The action of the request
    */
   public async userConfirmation(
     res: Response,
@@ -91,6 +94,35 @@ class AuthService extends UserRepository {
 
       // return response
       return ResponseHandler.successResponse(res, user, message);
+    } catch (error: any) {
+      throw error.message;
+    }
+  }
+
+  /**
+   * User login
+   * @param { Response } res The response object
+   * @param body The body of the request
+   */
+  public async login(res: Response, body: User): Promise<void> {
+    try {
+      const user = await this.getUserByUsername(body.username);
+      // if user exists
+      if (user) {
+        // compare password
+        const comparePassword = await this.utils.comparePassword(
+          user.password,
+          body.password,
+        )
+        if (comparePassword) {
+          const token = await this.utils.generateToken(user);
+          return ResponseHandler.successResponse(res, { user, token }, "Login correctly");
+        } else {
+          throw new Error("Wrong password");
+        }
+      } else {
+        throw new Error("User not found");
+      }
     } catch (error: any) {
       throw error.message;
     }

@@ -40,4 +40,18 @@ export class AuthController {
       ResponseHandler.handleInternalError(res, error, error.message);
     }
   }
+
+  /**
+   * Confirm user
+   * @param req Express request
+   * @param res Express response
+   */
+  login = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const body = matchedData(req) as User;
+      await this.service.login(res, body);
+    } catch (error: any) {
+      ResponseHandler.handleInternalError(res, error, 'Error on login');
+    }
+  }
 }

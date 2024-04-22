@@ -14,7 +14,12 @@ class UserRepository {
    * @param username String
    */
   public async getUserByUsername(username: string): Promise<User | void | null> {
-    return await this.model.findOne({ username });
+    return await this.model.findOne({
+      $or: [
+        { username: username },
+        { email: username }
+      ]
+    });
   }
 
   /**

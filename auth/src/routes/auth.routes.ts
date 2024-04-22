@@ -1,6 +1,6 @@
 import  { Router} from "express";
 import { AuthController } from "../controllers/auth.controller";
-import { RegisterValidator, ConfirmationUserValidator } from "../validators/auth.validator";
+import { RegisterValidator, ConfirmationUserValidator, LoginValidator } from "../validators/auth.validator";
 // init router
 const router = Router();
 
@@ -23,6 +23,15 @@ router.get(
     '/confirm',
     ConfirmationUserValidator,
     controller.userConfirmation
+);
+
+/**
+ * Do register user
+ */
+router.post(
+    '/login',
+    LoginValidator,
+    controller.login
 );
 
 // export router

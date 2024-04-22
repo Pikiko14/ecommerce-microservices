@@ -106,7 +106,49 @@ const ConfirmationUserValidator = [
     handlerValidator(req, res, next),
 ];
 
+const LoginValidator = [
+  check("username")
+    .exists()
+    .withMessage("Username does not exist")
+    .notEmpty()
+    .withMessage("Username is empty")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 5, max: 90 })
+    .withMessage("Username must have a minimum of 5 characters")
+    .custom(async (username: string) => {
+      const existUser = await repository.getUserByUsername(username);
+      // validate if user don't exist
+      if (!existUser) {
+        throw new Error("Username don't exist in our records");
+      }
+      // validate if user is ! active
+      if (existUser && !existUser.is_active) {
+        throw new Error("User is not active");
+      }
+      return true;
+    }),
+  check("password")
+    .exists()
+    .withMessage("Password is empty")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/\d/)
+    .withMessage("Password must contain at least one number")
+    .matches(/[$@#&!*-]/)
+    .withMessage(
+      "Password must contain at least one special character like $, @, #, &, - or !"
+    ),
+  (req: Request, res: Response, next: NextFunction) =>
+      handlerValidator(req, res, next),
+];
+
 export {
+  LoginValidator,
   RegisterValidator,
   ConfirmationUserValidator
 };
