@@ -1,2 +1,4 @@
 {"error":"Wrong password","level":"error","timestamp":"2024-04-22T22:45:41.357Z"}
 {"error":"Wrong password","level":"error","message":"Wrong password","timestamp":"2024-04-22T22:46:08.337Z"}
+{"error":"Wrong password","level":"error","message":"Error on login","timestamp":"2024-04-22T22:46:32.290Z"}
+{"error":"Wrong password","level":"error","message":"Error on login","timestamp":"2024-04-22T22:47:00.225Z"}
