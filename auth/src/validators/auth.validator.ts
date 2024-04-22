@@ -6,7 +6,8 @@ import { handlerValidator } from "../utils/handler.validator";
 // instanciate all class neccesaries
 const repository = new UserRepository();
 
-// build validator
+// build validators
+
 const RegisterValidator = [
   check("username")
     .exists()
@@ -79,4 +80,33 @@ const RegisterValidator = [
     handlerValidator(req, res, next),
 ];
 
-export { RegisterValidator };
+const ConfirmationUserValidator = [
+  check("action")
+  .exists()
+    .withMessage("Action is required")
+    .notEmpty()
+    .withMessage("Action is empty")
+    .isString()
+    .withMessage("Action must be a string"),
+  check("token")
+    .exists()
+    .withMessage("Token is required")
+    .notEmpty()
+    .withMessage("Token is empty")
+    .isString()
+    .withMessage("Token must be a string")
+    .custom(async (token: string) => {
+      const existToken = await repository.getUserByConfirmationToken(token);
+      if (!existToken) {
+        throw new Error("Token don't exist in our records");
+      }
+      return true;
+    }),
+  (req: Request, res: Response, next: NextFunction) =>
+    handlerValidator(req, res, next),
+];
+
+export {
+  RegisterValidator,
+  ConfirmationUserValidator
+};
