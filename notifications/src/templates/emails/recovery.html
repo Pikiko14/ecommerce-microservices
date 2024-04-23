@@ -498,7 +498,7 @@
                                     "
                                   >
                                     <span class="tinyMce-placeholder"
-                                      >¡Recover Your Account Access Now!</span
+                                      >¡Recover Your Account Now!</span
                                     >
                                   </h1>
                                 </td>
@@ -540,7 +540,7 @@
                                     "
                                   >
                                     <p style="margin: 0">
-                                      Hello {{ name }} {{ last_name }}. <br>
+                                      Hello {{ name }} {{ last_name }}. <br><br>
                                       We've noticed you're in need of regaining access to your account. No worries, we've got you covered! Simply follow the link below to reset your password and regain full access to all of our amazing features.
                                     </p>
                                   </div>
@@ -573,7 +573,7 @@
 <!
                                     [endif]-->
                                     <a
-                                      href="{{ url_confirmation }}?action=confirm-account&token={{ confirmation_token }}"
+                                      href="{{ url_recovery }}/recovery?token={{ recovery_token }}"
                                       target="_blank"
                                       style="
                                         text-decoration: none;

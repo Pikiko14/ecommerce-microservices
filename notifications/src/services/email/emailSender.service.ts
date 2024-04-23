@@ -73,6 +73,10 @@ export class EmailSenderService implements NotificationSenderInterface {
         params.app_url = configuration.get('APP_URL') || 'https://localhost:8080';
       }
 
+      if (template === 'recovery') {
+        params.url_recovery = configuration.get('APP_URL') || 'https://localhost:8080';
+      }
+
       // set html content
       let htmlWithContentParse = html.toString();
       Object.keys(params).forEach(variable => {
