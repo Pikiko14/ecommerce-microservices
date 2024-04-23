@@ -35,7 +35,7 @@ class AuthService extends UserRepository {
       user.confirmation_token = await this.utils.generateToken(user);
       await this.update(user.id, user);
 
-      // push notification queueue
+      // push notification queue
       const message: MessageBrokerInterface = {
         data: user,
         type_notification: TypeNotification.EMAIL,
@@ -123,6 +123,40 @@ class AuthService extends UserRepository {
       } else {
         throw new Error("User not found");
       }
+    } catch (error: any) {
+      throw error.message;
+    }
+  }
+
+  /**
+   * User recovery
+   * @param { Response } res The response object
+   * @param body The body of the request
+   */
+  public async recovery(res: Response, body: User): Promise<void> {
+    try {
+      // generate recovery toke
+      const { email } = body;
+      const user: any = await this.getUserByUsername(email) as User;
+      if (user) {
+        // generate token recovery
+        const token: string = await this.utils.generateTokenForRecoveryPassword({email});
+        user.recovery_token = token;
+        await user.save();
+
+        // push notification queue
+        const message: MessageBrokerInterface = {
+          data: user,
+          type_notification: TypeNotification.EMAIL,
+          template: "recovery",
+          subject: "Recovery password",
+          to: email
+        }
+        await messageBroker.publishMessage('notifications', message);
+      }
+      
+      // return response
+      return ResponseHandler.successResponse(res, { user }, "Email recovery send correctly");
     } catch (error: any) {
       throw error.message;
     }

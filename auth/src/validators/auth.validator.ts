@@ -147,8 +147,31 @@ const LoginValidator = [
       handlerValidator(req, res, next),
 ];
 
+const RecoveryValidator = [
+  check("email")
+    .exists()
+    .withMessage("Email does not exist")
+    .notEmpty()
+    .withMessage("Email is empty")
+    .isString()
+    .withMessage("Email must be a string")
+    .isEmail()
+    .withMessage("Invalid email format")
+    .isLength({ min: 5, max: 90 })
+    .withMessage("Email must have a minimum of 5 characters")
+    .custom(async (email: string) => {
+      const existEmail = await repository.getUserByEmail(email);
+      if (!existEmail) {
+          throw new Error("Email don't exist in our records");
+      }
+      return true;
+    }),
+  (req: Request, res: Response, next: NextFunction) => handlerValidator(req, res, next),
+];
+
 export {
   LoginValidator,
   RegisterValidator,
+  RecoveryValidator,
   ConfirmationUserValidator
 };

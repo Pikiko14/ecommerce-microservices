@@ -1,6 +1,6 @@
 import  { Router} from "express";
 import { AuthController } from "../controllers/auth.controller";
-import { RegisterValidator, ConfirmationUserValidator, LoginValidator } from "../validators/auth.validator";
+import { RegisterValidator, ConfirmationUserValidator, LoginValidator, RecoveryValidator } from "../validators/auth.validator";
 // init router
 const router = Router();
 
@@ -32,6 +32,15 @@ router.post(
     '/login',
     LoginValidator,
     controller.login
+);
+
+/**
+ * Do init recovery user password
+ */
+router.post(
+    '/recovery',
+    RecoveryValidator,
+    controller.recovery
 );
 
 // export router

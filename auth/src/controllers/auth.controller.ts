@@ -54,4 +54,18 @@ export class AuthController {
       ResponseHandler.handleInternalError(res, error, 'Error on login');
     }
   }
+
+  /**
+   * Recovery password
+   * @param req Express request
+   * @param res Express response
+   */
+  recovery = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const body = matchedData(req) as User;
+      await this.service.recovery(res, body);
+    } catch (error: any) {
+      ResponseHandler.handleInternalError(res, error, 'Error on recovery users');
+    }
+  }
 }
