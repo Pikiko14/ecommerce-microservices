@@ -156,7 +156,11 @@ class AuthService extends UserRepository {
       }
       
       // return response
-      return ResponseHandler.successResponse(res, { user }, "Email recovery send correctly");
+      return ResponseHandler.successResponse(
+        res,
+        { token: user.recovery_token },
+        "Email recovery send correctly"
+      );
     } catch (error: any) {
       throw error.message;
     }
