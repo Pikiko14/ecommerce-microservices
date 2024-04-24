@@ -176,17 +176,11 @@ class AuthService extends UserRepository {
       // get user
       const user: any = await this.getUserByToken(body.token as string);
       if (user) {
-        // compare password
-        const comparePassword = await this.utils.comparePassword(
-          user.password,
-          body.password,
-        )
-        if (comparePassword) {
-          user.password = await this.utils.encryptPassword(body.password);
-          await this.update(user.id, user);
-        } else {
-          throw new Error("Wrong password");
-        }
+        // set new password
+        user.recovery_token = null;
+        user.password = await this.utils.encryptPassword(body.password);
+        await this.update(user.id, user);
+        return ResponseHandler.successResponse(res, user, "Password changed correctly");
       } else {
         throw new Error("User not found");
       }
