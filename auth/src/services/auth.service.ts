@@ -67,7 +67,7 @@ class AuthService extends UserRepository {
   ): Promise<void> {
     try {
       // get user and validate
-      const user: any = await this.getUserByConfirmationToken(token);
+      const user: any = await this.getUserByToken(token);
 
       // validate action
       let message: string = "";
@@ -161,6 +161,35 @@ class AuthService extends UserRepository {
         { token: user.recovery_token },
         "Email recovery send correctly"
       );
+    } catch (error: any) {
+      throw error.message;
+    }
+  }
+
+  /**
+   * User change password
+   * @param { Response } res The response object
+   * @param body The body of the request
+   */
+  public async changePassword(res: Response, body: User): Promise<void> {
+    try {
+      // get user
+      const user: any = await this.getUserByToken(body.token as string);
+      if (user) {
+        // compare password
+        const comparePassword = await this.utils.comparePassword(
+          user.password,
+          body.password,
+        )
+        if (comparePassword) {
+          user.password = await this.utils.encryptPassword(body.password);
+          await this.update(user.id, user);
+        } else {
+          throw new Error("Wrong password");
+        }
+      } else {
+        throw new Error("User not found");
+      }
     } catch (error: any) {
       throw error.message;
     }

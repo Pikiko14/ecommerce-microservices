@@ -1,9 +1,11 @@
+import { Utils } from "../utils/utils";
 import { check } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import UserRepository from "../repositories/user.repository";
 import { handlerValidator } from "../utils/handler.validator";
 
 // instanciate all class neccesaries
+const utils = new Utils();
 const repository = new UserRepository();
 
 // build validators
@@ -82,7 +84,7 @@ const RegisterValidator = [
 
 const ConfirmationUserValidator = [
   check("action")
-  .exists()
+    .exists()
     .withMessage("Action is required")
     .notEmpty()
     .withMessage("Action is empty")
@@ -96,7 +98,7 @@ const ConfirmationUserValidator = [
     .isString()
     .withMessage("Token must be a string")
     .custom(async (token: string) => {
-      const existToken = await repository.getUserByConfirmationToken(token);
+      const existToken = await repository.getUserByToken(token);
       if (!existToken) {
         throw new Error("Token don't exist in our records");
       }
@@ -144,7 +146,7 @@ const LoginValidator = [
       "Password must contain at least one special character like $, @, #, &, - or !"
     ),
   (req: Request, res: Response, next: NextFunction) =>
-      handlerValidator(req, res, next),
+    handlerValidator(req, res, next),
 ];
 
 const RecoveryValidator = [
@@ -162,16 +164,76 @@ const RecoveryValidator = [
     .custom(async (email: string) => {
       const existEmail = await repository.getUserByEmail(email);
       if (!existEmail) {
-          throw new Error("Email don't exist in our records");
+        throw new Error("Email don't exist in our records");
       }
       return true;
     }),
-  (req: Request, res: Response, next: NextFunction) => handlerValidator(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    handlerValidator(req, res, next),
+];
+
+const ChangePasswordValidator = [
+  check("password")
+    .exists()
+    .withMessage("Password is empty")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/\d/)
+    .withMessage("Password must contain at least one number")
+    .matches(/[$@#&!*-]/)
+    .withMessage(
+      "Password must contain at least one special character like $, @, #, &, - or !"
+    ),
+  check("confirmation_password")
+    .exists()
+    .withMessage("Password is empty")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/\d/)
+    .withMessage("Password must contain at least one number")
+    .matches(/[$@#&!*-]/)
+    .withMessage(
+      "Password must contain at least one special character like $, @, #, &, - or !"
+    )
+    .custom((val: string, { req }) => {
+      if (val !== req.body?.password) {
+        throw new Error("Password don´t match");
+      }
+      return true;
+    }),
+  check("token")
+    .exists()
+    .withMessage("Token is empty")
+    .custom(async (token: string) => {
+      const existToken = await repository.getUserByToken(token);
+      if (!existToken) {
+        throw new Error("Token don't exist in our records");
+      }
+      return true;
+    })
+    .custom(async (token: string) => {
+      const isValid = await utils.verifyToken(token);
+      if (!isValid) {
+        throw new Error("Token expired");
+      }
+      return true;
+    }),
+  (req: Request, res: Response, next: NextFunction) =>
+    handlerValidator(req, res, next),
 ];
 
 export {
   LoginValidator,
   RegisterValidator,
   RecoveryValidator,
-  ConfirmationUserValidator
+  ChangePasswordValidator,
+  ConfirmationUserValidator,
 };

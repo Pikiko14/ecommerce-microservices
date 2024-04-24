@@ -34,8 +34,13 @@ class UserRepository {
    * Get User by email
    * @param token String
    */
-  public async getUserByConfirmationToken(token: string): Promise<User | void | null> {
-    return await this.model.findOne({ confirmation_token: token });
+  public async getUserByToken(token: string): Promise<User | void | null> {
+    return await this.model.findOne({
+      $or: [
+        { confirmation_token: token },
+        { recovery_token: token }
+      ]
+    });
   }
 
   /**

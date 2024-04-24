@@ -9,8 +9,8 @@ export enum UserRole {
 }
 
 export interface User extends LoginInterface {
-  _id?: string;
   id?: string;
+  _id?: string;
   email: string;
   role?: UserRole;
   scopes?: string[];
@@ -18,6 +18,7 @@ export interface User extends LoginInterface {
   recovery_token?: string;
   profile_pictury?: string;
   name: string | undefined;
+  token?: string | undefined;
   last_name: string | undefined;
   confirmation_token?: string | null;
 }
