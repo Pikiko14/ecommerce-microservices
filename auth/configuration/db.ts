@@ -3,7 +3,7 @@ import config from "./configuration";
 
 class Database {
   private readonly DB_URI: string;
-  private connection: Connection | null;
+  private connection: Connection | any;
 
   constructor() {
     this.DB_URI = config.get('APP_ENV') === 'develop' ? config.get('DB_URL') : config.get('MONGO_ATLAS_URL')!;
@@ -23,7 +23,7 @@ class Database {
   public async close(): Promise<void> {
     try {
       if (this.connection) {
-        await this.connection.close();
+        await this.connection.disconnect();
         console.log("Conexión a la base de datos cerrada correctamente.");
       }
     } catch (error) {

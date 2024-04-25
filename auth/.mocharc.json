@@ -1,6 +1,0 @@
-{
-  "extensions": ["js", "ts"],
-  "node-option": [
-    "loader=ts-node/esm"
-  ]
-}

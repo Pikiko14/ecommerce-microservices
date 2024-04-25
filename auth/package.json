@@ -4,7 +4,7 @@
   "description": "Auth microservices for ecommerce",
   "main": "src/app.ts",
   "scripts": {
-    "test": "mocha --timeout 10000 --require ts-node/register 'tests/**/*.ts' --unhandled-rejections=strict",
+    "test": "jest",
     "dev": "nodemon ./src/app.ts",
     "build": "dotenv -e .env tsc --outDir dist",
     "start": "node ./dist/app.js"
@@ -19,6 +19,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
     "@types/html-pdf": "^3.0.3",
+    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/mocha": "^10.0.6",
     "@types/mongoose": "^5.11.97",
@@ -26,10 +27,12 @@
     "@types/nodemailer": "^6.4.14",
     "@types/nodemon": "^1.19.2",
     "@types/sharp": "^0.32.0",
-    "chai": "^4.1.0",
+    "chai": "^4.4.1",
     "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
     "mocha": "^10.4.0",
     "pdf-to-png-converter": "^3.1.0",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
