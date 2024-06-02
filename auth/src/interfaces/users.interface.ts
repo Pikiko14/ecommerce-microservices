@@ -3,8 +3,8 @@ import { LoginInterface } from "./auth.interface";
 
 export enum UserRole {
   ADMIN = "admin",
-  EMPLOYEE = "employee",
-  WHOLESALE = "whole_sale",
+  COORDINATOR = "coordinator",
+  DOMICILIARY = "domiciliary",
   CLIENT = "client",
 }
 
